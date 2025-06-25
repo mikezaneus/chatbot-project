@@ -1,0 +1,44 @@
+name: Terraform CI
+
+on:
+  push:
+    paths:
+      - 'infra/**'
+  pull_request:
+    paths:
+      - 'infra/**'
+
+jobs:
+  terraform:
+    name: 'Terraform Plan and Apply'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: gcp-iam-chatbot/infra
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
+        working-directory: gcp-iam-chatbot/infra
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: gcp-iam-chatbot/infra
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: gcp-iam-chatbot/infra
+
+      # Uncomment below for auto apply (optional, secure with secrets)
+      # - name: Terraform Apply
+      #   run: terraform apply -auto-approve
+      #   working-directory: gcp-iam-chatbot/infra

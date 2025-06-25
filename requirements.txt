@@ -1,0 +1,4 @@
+flask
+google-cloud-recommender
+google-cloud-asset
+google-cloud-policy-troubleshooter
