@@ -1,17 +1,16 @@
 name: Terraform CI
 
 on:
-  push:
-    paths:
-      - 'infra/**'
-  pull_request:
-    paths:
-      - 'infra/**'
+  workflow_run:
+    workflows: ["atbCI/CD IAM Chot"]
+    types: [completed]
+    branches:
+      - main
 
 jobs:
   terraform:
     name: 'Terraform Plan and Apply'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest    
 
     steps:
       - name: Checkout Code
@@ -24,19 +23,19 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: infra/
+        working-directory: gcp-iam-chatbot/infra
 
       - name: Terraform Format Check
         run: terraform fmt -check
-        working-directory: infra/
+        working-directory: gcp-iam-chatbot/infra
 
       - name: Terraform Validate
         run: terraform validate
-        working-directory: infra/
+        working-directory: gcp-iam-chatbot/infra
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: infra/
+        working-directory: gcp-iam-chatbot/infra
 
       # Uncomment below for auto apply (optional, secure with secrets)
       # - name: Terraform Apply

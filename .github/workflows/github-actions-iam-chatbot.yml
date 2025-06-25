@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        path: gcp-iam-audit-chatbot-poc-updated/
 
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
@@ -22,17 +24,21 @@ jobs:
 
     - name: Docker Auth
       run: gcloud auth configure-docker
+      working-directory: gcp-iam-audit-chatbot-poc-updated/
+
 
     - name: Build and Push Image
       run: |
         IMAGE=gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
         docker build -t $IMAGE .
         docker push $IMAGE
+      working-directory: gcp-iam-audit-chatbot-poc-updated/
 
     - name: Terraform Init & Apply (Staging)
       run: |
         terraform init
         terraform apply -auto-approve -var="env=staging"
+      working-directory: gcp-iam-audit-chatbot-poc-updated/
 
     # - name: MS Teams Notify Success
     #   if: ${{ success() }}
@@ -54,6 +60,7 @@ jobs:
         terraform init
         terraform workspace select prod || terraform workspace new prod
         terraform apply -auto-approve -var="env=prod"
+      working-directory: gcp-iam-audit-chatbot-poc-updated/
 
     # - name: MS Teams Notify Production Deploy
     #   if: startsWith(github.ref, 'refs/tags/') && success()
