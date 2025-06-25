@@ -1,0 +1,88 @@
+pipeline {
+  agent any
+  environment {
+    GCP_PROJECT     = credentials('gcp-project-id')
+    GCP_CREDENTIALS = credentials('gcp-sa-key')
+    IMAGE_NAME      = "iam-chatbot"
+    VERSION         = "${BUILD_NUMBER}"
+    GCR_IMAGE       = "gcr.io/${GCP_PROJECT}/${IMAGE_NAME}:${VERSION}"
+    TEAMS_WEBHOOK   = credentials('teams-webhook-url') // MS Teams Incoming Webhook URL stored in Jenkins
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+    stage('Build & Push Docker Image') {
+      steps {
+        sh 'gcloud auth activate-service-account --key-file=${GCP_CREDENTIALS}'
+        sh 'gcloud auth configure-docker'
+        sh 'docker build -t ${GCR_IMAGE} .'
+        sh 'docker push ${GCR_IMAGE}'
+        sendTeamsNotification("✅ Docker image built and pushed: ${GCR_IMAGE}")
+      }
+    }
+    stage('Tag Git Commit') {
+      steps {
+        sh 'git tag v${VERSION}'
+        sh 'git push origin v${VERSION}'
+        sendTeamsNotification("🔖 Git tag v${VERSION} created and pushed.")
+      }
+    }
+    stage('Terraform Init & Plan') {
+      steps {
+        sh 'terraform init'
+        sh 'terraform validate'
+        sh 'terraform plan -out=tfplan'
+      }
+    }
+    stage('Deploy to Staging') {
+      steps {
+        sh 'terraform apply -auto-approve tfplan'
+        sendTeamsNotification("🚀 IAM Chatbot version ${VERSION} deployed to Staging.")
+      }
+    }
+    stage('Approval for Production') {
+      steps {
+        script {
+          def userInput = input message: "Approve deployment to production?", parameters: [booleanParam(defaultValue: false, description: 'Approve?', name: 'PROD_APPROVED')]
+          if (!userInput) {
+            error("❌ Production deployment not approved.")
+          }
+        }
+      }
+    }
+    stage('Deploy to Production') {
+      steps {
+        sh 'terraform workspace select prod || terraform workspace new prod'
+        sh 'terraform apply -auto-approve tfplan'
+        sendTeamsNotification("🚀 IAM Chatbot version ${VERSION} deployed to Production.")
+      }
+    }
+  }
+  post {
+    failure {
+      sendTeamsNotification("❌ Jenkins Pipeline Failed on version ${VERSION}. Please investigate.")
+    }
+  }
+}
+
+def sendTeamsNotification(String msg) {
+  def payload = """
+  {
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    "themeColor": "0076D7",
+    "summary": "IAM Chatbot CI/CD Notification",
+    "sections": [{
+      "activityTitle": "**IAM Chatbot CI/CD Update**",
+      "text": "${msg}"
+    }]
+  }
+  """
+  httpRequest contentType: 'APPLICATION_JSON',
+              httpMode: 'POST',
+              requestBody: payload,
+              url: "${env.TEAMS_WEBHOOK}"
+}

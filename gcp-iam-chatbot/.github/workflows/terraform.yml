@@ -24,21 +24,21 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: gcp-iam-chatbot/infra
+        working-directory: infra/
 
       - name: Terraform Format Check
         run: terraform fmt -check
-        working-directory: gcp-iam-chatbot/infra
+        working-directory: infra/
 
       - name: Terraform Validate
         run: terraform validate
-        working-directory: gcp-iam-chatbot/infra
+        working-directory: infra/
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: gcp-iam-chatbot/infra
+        working-directory: infra/
 
       # Uncomment below for auto apply (optional, secure with secrets)
       # - name: Terraform Apply
       #   run: terraform apply -auto-approve
-      #   working-directory: gcp-iam-chatbot/infra
+      #   working-directory: infra/
