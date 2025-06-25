@@ -34,19 +34,19 @@ jobs:
         terraform init
         terraform apply -auto-approve -var="env=staging"
 
-    - name: MS Teams Notify Success
-      if: ${{ success() }}
-      run: |
-        curl -H 'Content-Type: application/json' \
-        -d '{
-          "@type": "MessageCard",
-          "@context": "http://schema.org/extensions",
-          "summary": "CI/CD Notification",
-          "themeColor": "28A745",
-          "title": "✅ CI/CD Pipeline Success",
-          "text": "**IAM Chatbot** was successfully built and deployed to *Staging*.<br>Commit: `${{ github.sha }}`<br>Branch: `${{ github.ref_name }}`"
-        }' \
-        ${{ secrets.TEAMS_WEBHOOK }}
+    # - name: MS Teams Notify Success
+    #   if: ${{ success() }}
+    #   run: |
+    #     curl -H 'Content-Type: application/json' \
+    #     -d '{
+    #       "@type": "MessageCard",
+    #       "@context": "http://schema.org/extensions",
+    #       "summary": "CI/CD Notification",
+    #       "themeColor": "28A745",
+    #       "title": "✅ CI/CD Pipeline Success",
+    #       "text": "**IAM Chatbot** was successfully built and deployed to *Staging*.<br>Commit: `${{ github.sha }}`<br>Branch: `${{ github.ref_name }}`"
+    #     }' \
+    #     ${{ secrets.TEAMS_WEBHOOK }}
 
     - name: Terraform Apply (Production) [on Tag]
       if: startsWith(github.ref, 'refs/tags/')
@@ -55,17 +55,17 @@ jobs:
         terraform workspace select prod || terraform workspace new prod
         terraform apply -auto-approve -var="env=prod"
 
-    - name: MS Teams Notify Production Deploy
-      if: startsWith(github.ref, 'refs/tags/') && success()
-      run: |
-        curl -H 'Content-Type: application/json' \
-        -d '{
-          "@type": "MessageCard",
-          "@context": "http://schema.org/extensions",
-          "summary": "CI/CD Notification",
-          "themeColor": "0078D4",
-          "title": "🚀 Production Deployment Complete",
-          "text": "**IAM Chatbot** was deployed to *Production* using tag `${{ github.ref_name }}`"
-        }' \
-        ${{ secrets.TEAMS_WEBHOOK }}
+    # - name: MS Teams Notify Production Deploy
+    #   if: startsWith(github.ref, 'refs/tags/') && success()
+    #   run: |
+    #     curl -H 'Content-Type: application/json' \
+    #     -d '{
+    #       "@type": "MessageCard",
+    #       "@context": "http://schema.org/extensions",
+    #       "summary": "CI/CD Notification",
+    #       "themeColor": "0078D4",
+    #       "title": "🚀 Production Deployment Complete",
+    #       "text": "**IAM Chatbot** was deployed to *Production* using tag `${{ github.ref_name }}`"
+    #     }' \
+    #     ${{ secrets.TEAMS_WEBHOOK }}
 

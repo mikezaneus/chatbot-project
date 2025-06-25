@@ -1,4 +1,3 @@
 
-project_id = "your-gcp-project-id"
+project_id = "prj-se-mikezane-4a2f"
 env        = "prod"
-version    = "123"

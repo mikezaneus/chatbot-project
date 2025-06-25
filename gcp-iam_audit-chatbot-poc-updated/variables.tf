@@ -21,11 +21,13 @@ variable "version" {
 variable "teams_webhook" {
   description = "Microsoft Teams Webhook URL"
   type        = string
+  default = null
 }
 
 variable "sendgrid_api_key" {
   description = "SendGrid API key"
   type        = string
+  default     = null
 }
 
 variable "alert_email" {

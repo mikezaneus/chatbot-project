@@ -1,7 +1,7 @@
 
 terraform {
   backend "gcs" {
-    bucket  = "your-tf-state-bucket"
+    bucket  = "iam-audit-project-2025"
     prefix  = "iam-chatbot/state"
   }
 }
