@@ -10,8 +10,9 @@ from googleapiclient.discovery import build
 import requests
 
 # Environment variables
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT") 
-BUCKET_NAME = os.getenv("BUCKET_NAME")
+PROJECT_ID = os.getenv("prj-se-mikezane-4a2f") 
+BUCKET_NAME = os.getenv(" iam-audit-project-2025")
+
 # SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 # ALERT_EMAIL = os.getenv("ALERT_EMAIL")
 # FROM_EMAIL = os.getenv("FROM_EMAIL", "security-alerts@yourdomain.com")
