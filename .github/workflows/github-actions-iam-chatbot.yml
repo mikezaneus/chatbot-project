@@ -29,17 +29,13 @@ jobs:
         password: ${{ secrets.GCP_DOCKER_PASSWORD }}
 
 
-    # - name: Build and Push Image
-    #   run: |
-    #     IMAGE=gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
-    #     docker build -t $IMAGE .
-    #     docker push $IMAGE
-    #   # working-directory: .../gcp-iam-chatbot/
-
-    - name: Build and Push Docker Image
+    - name: Build and Push Image
       run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }} ./app
-          docker push gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
+        IMAGE=gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
+        docker build -t $IMAGE .
+        docker push $IMAGE
+      # working-directory: .../gcp-iam-chatbot/
+
 
 
     - name: Terraform Init & Apply (Staging)
