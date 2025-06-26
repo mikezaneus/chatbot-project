@@ -9,9 +9,9 @@ variable "region" {
   description = "GCP region"
 }
 
-variable "image_url" {
+variable "image" {
   type        = string
-  description = "Docker image URL for Cloud Run deployment"
+  description = "Docker image for Cloud Run deployment"
 }
 
 variable "service_account_id" {

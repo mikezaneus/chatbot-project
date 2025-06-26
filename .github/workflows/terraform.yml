@@ -2,7 +2,7 @@ name: Terraform CI
 
 on:
   workflow_run:
-    workflows: ["atbCI/CD IAM Chot"]
+    workflows: ["CI/CD IAM Chatbot"]
     types: [completed]
     branches:
       - main

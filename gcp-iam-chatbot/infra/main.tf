@@ -36,7 +36,7 @@ resource "google_cloud_run_service" "chatbot" {
   template {
     spec {
       containers {
-        image = var.image_url
+        docker_image = var.image
       }
       service_account_name = google_service_account.chatbot.email
     }

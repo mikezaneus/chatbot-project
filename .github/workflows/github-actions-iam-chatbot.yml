@@ -23,8 +23,10 @@ jobs:
         # service_account_key: ${{ secrets.GCP_SA_KEY }}
 
     - name: Docker Auth
-      run: gcloud auth configure-docker
-      working-directory: gcp-iam-audit-chatbot-poc-updated/
+      uses: docker/login-action@v2
+      with:
+        username: ${ secrets.GCP_DOCKER_USERNAME }
+        password: ${{ secrets.GCP_DOCKER_PASSWORD }}
 
 
     - name: Build and Push Image
@@ -32,7 +34,7 @@ jobs:
         IMAGE=gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
         docker build -t $IMAGE .
         docker push $IMAGE
-      working-directory: gcp-iam-audit-chatbot-poc-updated/
+      working-directory: gcp-iam-chatbot/
 
     - name: Terraform Init & Apply (Staging)
       run: |
