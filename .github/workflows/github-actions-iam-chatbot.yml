@@ -34,7 +34,7 @@ jobs:
         IMAGE=gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
         docker build -t $IMAGE .
         docker push $IMAGE
-      working-directory: ./gcp-iam-chatbot
+      working-directory: gcp-iam-chatbot
 
     - name: Terraform Init & Apply (Staging)
       run: |
