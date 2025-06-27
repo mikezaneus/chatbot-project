@@ -36,7 +36,9 @@ jobs:
     #     docker push $IMAGE
     #   working-directory: .     #../gcp-iam-chatbot/
     - name: present working directory
-      run: pwd
+      run: |
+           pwd
+           ls -la
      
 
     - name: Build and push
