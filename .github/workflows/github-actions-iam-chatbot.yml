@@ -35,6 +35,9 @@ jobs:
     #     docker build -t $IMAGE .
     #     docker push $IMAGE
     #   working-directory: .     #../gcp-iam-chatbot/
+    - name: present working directory
+      run: pwd
+     
 
     - name: Build and push
       uses: docker/build-push-action@v5
