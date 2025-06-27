@@ -45,7 +45,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
           context: .
-          # file: Dockerfile
+          file: gcp-iam-audit-chatbot-poc-updated/Dockerfile
           push: true
           tags: mikezane/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
 
