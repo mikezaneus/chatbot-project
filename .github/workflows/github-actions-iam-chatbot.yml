@@ -42,7 +42,7 @@ jobs:
       run: |
         terraform init
         terraform apply -auto-approve -var="env=staging"
-      # working-directory: gcp-iam-audit-chatbot-poc-updated/
+      working-directory: gcp-iam-audit-chatbot-poc-updated/
 
     # - name: MS Teams Notify Success
     #   if: ${{ success() }}
