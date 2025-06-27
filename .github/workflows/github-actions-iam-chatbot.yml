@@ -34,7 +34,7 @@ jobs:
         IMAGE=gcr.io/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
         docker build -t $IMAGE .
         docker push $IMAGE
-      working-directory: .../gcp-iam-chatbot/
+      working-directory: .  #../gcp-iam-chatbot/
 
 
 
@@ -42,7 +42,7 @@ jobs:
       run: |
         terraform init
         terraform apply -auto-approve -var="env=staging"
-      working-directory: gcp-iam-audit-chatbot-poc-updated/
+      # working-directory: gcp-iam-audit-chatbot-poc-updated/
 
     # - name: MS Teams Notify Success
     #   if: ${{ success() }}
