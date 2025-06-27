@@ -40,6 +40,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
           context: .
+          file: gcp-iam-chatbot/Dockerfile
           push: true
           tags: mikezane/${{ secrets.GCP_PROJECT }}/iam-chatbot:${{ github.run_number }}
 
