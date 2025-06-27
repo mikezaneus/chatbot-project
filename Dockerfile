@@ -12,6 +12,6 @@ COPY requirements.txt .
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY app/ .
+# COPY app/ .
 
-CMD ["python", "mcp_backend.py"]
+CMD ["python", "app.py"]
